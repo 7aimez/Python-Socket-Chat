@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+<input id="msg" autocomplete="off"><button onclick="send()">Send</button>
+<pre id="chat"></pre>
+<script>
+let nickname = prompt("Choose your nickname:");
+let ws = new WebSocket("ws://localhost:8765");
+ws.onopen = () => {
+    ws.send(JSON.stringify({type: "nickname", data: nickname}));
+};
+ws.onmessage = (event) => {
+    document.getElementById('chat').textContent += event.data + "\n";
+};
+function send() {
+    let msg = document.getElementById('msg').value;
+    ws.send(JSON.stringify({type: "message", data: msg}));
+    document.getElementById('msg').value = "";
+}
+</script>
+</body>
+</html>
